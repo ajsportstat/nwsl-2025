@@ -1,0 +1,417 @@
+---
+title: "2025 NWSL Schedule Exploration"
+author: "ajsportstat"
+date: '2025-01-22'
+output: html_document
+---
+
+Hi! I have been a fan of the NWSL (go bats!) for around 2 years now and have been a fan of data for a lot longer than that, so when the 2025 schedule dropped I decided to try making some visuals to see if there were any trends. The first thing I noticed (I did not make a visual to represent this, sorry!) was that there are no repeat games until Week 14 (that is, none of the teams will play an opponent for the second time before week 14). I don't know if this usually happens, but I know it didn't happen last year so this was super exciting to see.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  fig.path = "man/figures/README-"
+)
+```
+
+```{r, include=FALSE}
+# install.packages("tidyverse")
+# install.packages("rlang")
+# install.packages("devtools")
+# install.packages("plotly")
+# devtools::install_github("JaseZiv/worldfootballR")
+# devtools::install_github("nwslR/nwslR")
+# devtools::install_github("American-Soccer-Analysis/itscalledsoccer-r")
+library(devtools)
+# library(itscalledsoccer)
+# library(nwslR)
+library(worldfootballR)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+```
+```{r, include = FALSE}
+acfc <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Angel City")
+bay <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Bay FC")
+courage <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Courage")
+current <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Current")
+dash <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Dash")
+gotham <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Gotham")
+louisville <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Louisville")
+pride <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Pride")
+redstars <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Red Stars")
+reign <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Reign")
+royals <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Royals")
+spirit <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Spirit")
+thorns <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Thorns")
+wave <- readxl::read_xlsx("2025 NWSL Schedules.xlsx", sheet = "Wave")
+
+```
+```{r, include=FALSE}
+nwsl24_standings <- data.frame(Squad = c("Pride", "Spirit", "Gotham", "Current", "Courage", "Thorns", "Bay FC", "Red Stars", "Louisville", "Wave", "Royals", "Angel City", "Reign", "Dash"), Placement = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14), Points = c(60,56,56,55,39,34,34,32,28,25,25,24,23,20))
+```
+```{r, include=FALSE}
+ds_list <- list(acfc, bay, courage, current, dash, gotham, louisville, pride, redstars, reign, royals, spirit, thorns, wave)
+ds_list
+
+merged_list <- lapply(ds_list, function(dataset) {
+  # Merge the dataset with merge_df (adjust by = "common_column_name" to your actual merge key)
+  merged_dataset <- left_join(dataset, nwsl24_standings, by = c("Opponent" = "Squad")) %>% mutate(team_color = case_when(
+  grepl("Angel", Team) ~ "#F09491",
+  grepl("Bay", Team) ~ "#051C2C",
+  grepl("Red Stars", Team) ~ "#41B6E6",
+  grepl("Dash", Team) ~ "#FF6900",
+  grepl("Current", Team) ~ "#64CCC9",
+  grepl("Louisville", Team) ~ "#C5B4E3",
+  grepl("Gotham", Team) ~ "#a7f0f6",
+  grepl("Courage", Team) ~ "#B3A369",
+  grepl("Pride", Team) ~ "#5F249F",
+  grepl("Thorns", Team) ~ "#93282C",
+  grepl("Wave", Team) ~ "#E31C79",
+  grepl("Reign", Team) ~ "#071D49",
+  grepl("Royals", Team) ~ "#FFB81C",
+  grepl("Spirit", Team) ~ "#000000"
+)) %>% select(-c(Date, Time))
+
+
+  # Extract the identifier value from the id_column (assuming it's constant for the entire dataset)
+  id_value <- unique(dataset$Team)[1]  # Using unique() in case there are any NA or different values
+
+  # Create new dataset name using the identifier value
+  new_dataset_name <- paste0(id_value, "1")
+
+  # Assign the merged dataset to a new variable in the global environment
+  assign(new_dataset_name, merged_dataset, envir = .GlobalEnv)
+
+  return(merged_dataset)  # Return the merged dataset if you want to keep it in a list (optional)
+})
+
+all_games <- bind_rows(`Angel City1`, `Bay FC1`, Courage1, Current1, Dash1, Gotham1, Louisville1, Pride1, `Red Stars1`, Reign1, Royals1, Spirit1, Thorns1, Wave1)
+```
+```{r, include=FALSE}
+ds_list <- list(acfc, bay, courage, current, dash, gotham, louisville, pride, redstars, reign, royals, spirit, thorns, wave)
+
+merged_list <- lapply(ds_list, function(dataset) {
+  # Merge the dataset with merge_df (adjust by = "common_column_name" to your actual merge key)
+  new_dataset <- dataset %>% select(-c(Date, Time))
+  # Extract the identifier value from the id_column (assuming it's constant for the entire dataset)
+  id_value <- unique(dataset$Team)[1]  # Using unique() in case there are any NA or different values
+  
+  # Create new dataset name using the identifier value
+  new_dataset_name <- paste0(id_value, "2")
+  
+  # Assign the merged dataset to a new variable in the global environment
+  assign(new_dataset_name, new_dataset, envir = .GlobalEnv)
+  
+  return(new_dataset)  # Return the merged dataset if you want to keep it in a list (optional)
+})
+
+all_sched <- bind_rows(`Angel City2`, `Bay FC2`, Courage2, Current2, Dash2, Gotham2, Louisville2, Pride2, `Red Stars2`, Reign2, Royals2, Spirit2, Thorns2, Wave2) %>% left_join(nwsl24_standings, by = c("Opponent" = "Squad")) %>% mutate(team_color = case_when(
+  grepl("Angel", Team) ~ "#F09491",
+  grepl("Bay", Team) ~ "#051C2C",
+  grepl("Red Stars", Team) ~ "#41B6E6",
+  grepl("Dash", Team) ~ "#FF6900",
+  grepl("Current", Team) ~ "#64CCC9",
+  grepl("Louisville", Team) ~ "#C5B4E3",
+  grepl("Gotham", Team) ~ "#a7f0f6",
+  grepl("Courage", Team) ~ "#B3A369",
+  grepl("Pride", Team) ~ "#5F249F",
+  grepl("Thorns", Team) ~ "#93282C",
+  grepl("Wave", Team) ~ "#E31C79",
+  grepl("Reign", Team) ~ "#071D49",
+  grepl("Royals", Team) ~ "#FFB81C",
+  grepl("Spirit", Team) ~ "#000000"
+))
+
+```
+```{r, include=FALSE}
+color_mapping <- unique(all_sched[, c("team_color", "Team")])
+
+
+difficulty <- ggplot(all_sched, aes(x = Week, y = Placement, group = Team, color = team_color)) +
+  geom_line(linewidth = 1) + 
+  scale_color_manual(values = color_mapping$team_color, labels = color_mapping$Team) + 
+  scale_y_reverse() + 
+  labs(title = "NWSL 2025 Schedule Difficulty",
+       subtitle = "NWSL 2024 Final Table Positions of Opponents, by 2025 Gameweek") +
+  xlab("Game Week (2025)") + 
+  ylab("Opponent's 2024 Final Placement")
+  
+
+difficulty %>% ggplotly()
+
+```
+
+
+**Visual #1: Days of the week of games**
+
+```{r, echo=FALSE}
+days <- all_sched %>% count(Team, `Day of Week`, `Home or Away`) %>% mutate(`Day of Week` = factor(`Day of Week` , levels = c("Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday")))
+
+
+dayplot <- ggplot(days, aes(fill = `Home or Away`, x = `Day of Week`, y=n)) + 
+  geom_bar(position = position_dodge(preserve = "single"), stat = "identity") + facet_wrap(~Team) +
+  theme_minimal() + labs(title = "Days of Games, by Home and Away") + xlab("Day of the Week") + ylab("Number of Games") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  scale_y_continuous(breaks = seq(0, 15, by = 5))
+
+  
+dayplot %>% ggplotly()
+```
+
+My main takeaway from this graph was that Bay, Courage, and Current have a lot of Saturday home games, and Houston has a ton of Friday home games. If I knew more about each individual team's stadium situation (i.e. how many teams and which teams they share their stadium with), I would have something more interesting to say here but unfortunately I do not.
+
+**Visuals #2 & #3: Time of day of games**
+
+(All times are in local time of where the game is taking place)
+
+```{r, echo=FALSE}
+
+timedf <- all_sched %>% filter(!is.na(DateTime)) %>% mutate(Time = format(as.POSIXct(DateTime), format = "%H:%M")) %>%
+  mutate(fakedate = dmy("01-01-2000")) %>%  # pretend all happen on same day
+  mutate(fakedate_time = ymd_hm(paste(fakedate, Time)))
+
+times <- timedf %>% ggplot(aes(fakedate_time, colour = Team)) +
+  geom_freqpoly(binwidth = 1800) +  # bins of 1800 seconds = 30 minutes
+  scale_color_manual(values = setNames(color_mapping$team_color, color_mapping$Team)) +
+  labs(title = "Times of Games") +
+  xlab("Time of Day") + 
+  ylab("Number of Games") +
+  theme_minimal() +  
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  scale_y_continuous(breaks = seq(0, 15, by = 5))+
+  facet_wrap(~Team) 
+
+times %>% ggplotly()
+
+
+times_home_away <- timedf %>% ggplot(aes(fakedate_time, colour=`Home or Away`)) +
+  geom_freqpoly(binwidth = 1800) +  # bins of 1800 seconds = 30 minutes
+  labs(title = "Times of Games, by Home and Away") +
+  xlab("Time of Day") + 
+  ylab("Number of Games") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  scale_y_continuous(breaks = seq(0, 12, by = 3))+
+  facet_wrap(~Team) 
+
+times_home_away %>% ggplotly()
+
+```
+
+A lot of teams looooovee the 7-7:30 PM window.
+
+**Visuals #4 & #5: Broadcasters of games**
+
+```{r, echo = FALSE}
+all_sched1 <- all_sched %>% count(Team, Platform, team_color)
+all_sched2 <- all_sched1 %>% filter(Platform!="TBD")
+color_mapping <- unique(all_sched2[, c("team_color", "Team")])
+
+broadcast <- all_sched %>% count(Team, Platform) %>% left_join(nwsl24_standings, by = c("Team" = "Squad")) %>% select(-Points) %>% filter(Platform!="TBD")
+
+broadcasters <- ggplot(broadcast, aes(fill=Platform, x=Platform, y = n)) + 
+    geom_bar(position=position_dodge(preserve = "single"), stat="identity") + facet_wrap(~Team) +
+  theme_minimal() + labs(title = "Game Broadcasters by Team") + xlab("Broadcaster") + ylab("Number of Games") + scale_x_discrete(labels = NULL, breaks = NULL)
+
+ggplotly(broadcasters)
+
+
+```
+
+I also did a version of this that was organized by 2024 team standings, to see if there are any patterns there. Also, for both of these graphs, if a game was on just Paramount+ and NWSL+, I categorized it as just NWSL+.
+
+```{r, echo = FALSE}
+broadcast <- all_sched %>% count(Team, Platform) %>% left_join(nwsl24_standings, by = c("Team" = "Squad")) %>% select(-Points) %>% filter(Platform!="TBD")
+
+broadcast_standings <- ggplot(broadcast, aes(fill = Platform, x = Platform, y=n)) + 
+  geom_bar(position = position_dodge(preserve = "single"), stat = "identity") + facet_wrap(~Placement, labeller = labeller(Placement = c(
+  "1" = "Pride", 
+  "2" = "Spirit", 
+  "3" = "Gotham", 
+  "4" = "Current", 
+  "5" = "Courage", 
+  "6" = "Thorns", 
+  "7" = "Bay FC", 
+  "8" = "Red Stars", 
+  "9" = "Louisville", 
+  "10" = "Wave", 
+  "11" = "Royals", 
+  "12" = "Angel City", 
+  "13" = "Reign", 
+  "14" = "Dash"))) +
+  theme_minimal() + labs(title = "Broadcasters of Games, by 2024 Standings") + xlab("Broadcaster") + ylab("Number of Games") + scale_x_discrete(labels = NULL, breaks = NULL)
+
+broadcast_standings %>% ggplotly()
+```
+
+Lots of NWSL+ for Dash, Reign, Royals, and Louisville.
+
+The next few visuals are where it starts to get interesting/a little less objective. I tried to plot the week-over-week difficulty of games for each team based on their opponent for that week's 2024 final table position and the number of points their opponent ended the 2024 season with.
+
+**Visuals #6 & #7: Expected difficulty week-over-week**
+
+```{r, echo = FALSE}
+plotnew <- ggplot(all_sched, aes(x = as.numeric(Week), y = as.numeric(Placement), group = Team, color = Team, text = paste("Opponent:", Opponent))) + scale_y_reverse() + geom_point() + scale_color_manual(values = setNames(color_mapping$team_color, color_mapping$Team)) + geom_line(inherit.aes = TRUE) +
+  labs(title = "NWSL 2025 Schedule Difficulty",
+       subtitle = "NWSL 2024 Final Table Positions of Opponents, by 2025 Gameweek") +
+  xlab("Game Week (2025)") + 
+  ylab("Opponent's 2024 Final Placement") +
+  theme_minimal() +
+  facet_wrap(~Team)
+
+plotnew %>% ggplotly()
+
+```
+```{r, echo = FALSE}
+difficulty_points <- ggplot(all_sched, aes(x = as.numeric(Week), y = as.numeric(Points), group = Team, color = Team, text = paste("Opponent:", Opponent))) + geom_point() + scale_color_manual(values = setNames(color_mapping$team_color, color_mapping$Team)) + geom_line(inherit.aes = TRUE) +
+  labs(title = "NWSL 2025 Schedule Difficulty",
+       subtitle = "Points Earned in 2024 by Opponents, by 2025 Gameweek") +
+  xlab("Game Week (2025)") + 
+  ylab("Opponent's 2024 Points") +
+  theme_minimal()+
+  facet_wrap(~Team)
+difficulty_points %>% ggplotly()
+
+```
+
+In the second visual, which uses points instead of placement, you can more clearly see the gap between the top 4 and the rest of the league. Also, in both graphs you can see trends like Louisville having a tough few weeks right in the middle of the season. This is definitely not a graphic you should rely on for this season because there will be completely different teams with potentially completely different performances, but it's still something fun to look at with the information we have right now.
+
+I also made this absolutely deranged version that has all of the teams overlaid onto one plot and is impossible to read, but in case anyone would want to see that, enjoy lol.
+
+```{r, echo = FALSE}
+crazy <- ggplot(all_sched, aes(Week, Placement, color = team_color, group = Team)) + geom_line(linewidth = 1)  + scale_color_manual(values = color_mapping$team_color, labels = color_mapping$Team) + scale_y_reverse() +
+  labs(title = "NWSL 2025 Schedule Difficulty",
+       subtitle = "NWSL 2024 Final Table Positions of Opponents, by 2025 Gameweek") +
+  xlab("Game Week (2025)") +
+  ylab("Opponent's 2024 Final Placement")
+
+crazy %>% ggplotly(width = 6000, height = 600)
+```
+
+The next few visuals are especially unproven. Basically, I created a linear model that calculates "expected points" per game based on the result from 2024 of that exact scenario (same home team, same away team), the home/away points per game of Team A, and the home/away points per game of Team A's opponent.
+
+For example, if I were looking at the first game of the 2025 season, Pride vs. Chicago, from the perspective of Orlando Pride, the result from 2024 would be 1 point (since in 2024 when Pride hosted Red Stars the result was a 1-1 draw), the points per game for Team A (Orlando) would be 2.54 since that was Orlando's points per game at home in 2024, and the points per game for Team A's opponent (Chicago) would be 1.54 since that was Chicago's points per game away in 2024.
+
+This model does not use a lot of information, and is also based on outdated information (I would hope that Houston does not finish dead last this year with the offseason they've had so far), so please don't take any of the following seriously!! Also, it has been a while since I have thought about statistics, so I'm not even sure that this model makes any sense lol. The coefficients in this model had p-values that were well under 0.05, but what that really means is that this model would be really good at predicting the results of the 2024 season, so all of the following is truly just for fun.
+
+**Visual #8: Expected points week-over-week**
+```{r, include = FALSE}
+# create dataset of home/away points per game
+ppg <- data.frame(
+  Team = c("Pride", "Spirit", "Gotham", "Current", "Courage", "Thorns", "Bay FC", "Red Stars", "Louisville", "Wave", "Royals", "Angel City", "Reign", "Dash"),
+  Points_home = c(33,31,30,30,30,22,15,12,20,18,14,12,16,10),
+  Points_away = c(27,25,26,25,9,12,19,20,8,7,11,15,7,10))
+
+ppg1 <- ppg %>% mutate(ppg_home = Points_home/13,
+                       ppg_away = Points_away/13)
+# merge allsched to ppg
+allsched_ppg <- all_sched %>% left_join(
+  ppg1 %>% select(Team, ppg_home, ppg_away) %>% 
+    rename(ppg_home_team1 = ppg_home, 
+           ppg_away_team1 = ppg_away), by = "Team")
+allsched_ppg2 <-  allsched_ppg %>% left_join(
+  ppg1 %>% select(Team, ppg_home, ppg_away) %>% 
+    rename(ppg_home_opp = ppg_home, 
+           ppg_away_opp = ppg_away), by = c("Opponent" = "Team"))
+
+
+allsched_ppg3 <- allsched_ppg2 %>% 
+  mutate(ppg_team1 = ifelse(`Home or Away`=="Home", ppg_home_team1, ppg_away_team1),
+         ppg_opp = ifelse(`Home or Away`=="Home", ppg_away_opp, ppg_home_opp))
+
+
+# create dataset of match results
+nwsl24_results <- fb_match_results(country = "USA", gender = "F", season_end_year = "2024")
+
+nwsl24_results2 <- nwsl24_results %>% filter(Round == "Regular Season") %>% select(Home, Away, HomeGoals, Home_xG, AwayGoals, Away_xG)
+
+# create version of all_sched that is de-duped and merge to nwsl24_results2
+nwsl25_dedup <- allsched_ppg3 %>% mutate(HomeTeam = ifelse(`Home or Away`=="Home", Team, Opponent),
+                                     AwayTeam = ifelse(`Home or Away`=="Away", Team, Opponent))
+
+nwsl25_dedup2 <- nwsl25_dedup %>% select(HomeTeam, AwayTeam) %>% distinct()
+
+nwsl25_dedup_results <- nwsl25_dedup2 %>% left_join(nwsl24_results2, by = c("HomeTeam" = "Home", "AwayTeam" = "Away"))
+
+
+# now merge this dataset to nwsl25_dedup
+nwsl25_dedup_results2 <- nwsl25_dedup %>% left_join(nwsl25_dedup_results, by = c("HomeTeam", "AwayTeam"))
+
+
+# now create match result var for Team
+nwsl25_dedup_results3 <- nwsl25_dedup_results2 %>% mutate(
+  result = case_when(
+    `Home or Away`=="Home" & HomeGoals>AwayGoals ~ 3,
+    `Home or Away`=="Home" & HomeGoals==AwayGoals ~ 1,
+    `Home or Away`=="Home" & HomeGoals<AwayGoals ~ 0,
+    `Home or Away`=="Away" & HomeGoals<AwayGoals ~ 3,
+    `Home or Away`=="Away" & HomeGoals==AwayGoals ~ 1,
+    `Home or Away`=="Away" & HomeGoals>AwayGoals ~ 0,
+    ))
+
+```
+
+## Run linear model
+```{r, include = FALSE}
+diffmodel <- lm(result ~ Points + ppg_team1 + ppg_opp, data = nwsl25_dedup_results3)
+summary(diffmodel)
+
+diffmodel2 <- lm(result ~ ppg_team1 + ppg_opp, data = nwsl25_dedup_results3)
+summary(diffmodel2)
+
+# add new xPoints column
+nwsl25_dedup_results4 <- nwsl25_dedup_results3 %>% mutate(
+  xPoints = 1.42473 + 0.87648*ppg_team1 - 0.88543*ppg_opp
+)
+```
+
+
+## Create graph of xPoints by week
+```{r, echo = FALSE}
+difficulty_lm <- ggplot(nwsl25_dedup_results4, aes(x = as.numeric(Week), y = as.numeric(xPoints), group = Team, color = Team, text = paste("Opponent:", Opponent))) + geom_point() + scale_color_manual(values = setNames(color_mapping$team_color, color_mapping$Team)) + geom_line(inherit.aes = TRUE) +
+  labs(title = "NWSL 2025 Schedule Difficulty",
+       subtitle = "Expected Points in Each Game Week, Based on Expected Points Model") +
+  xlab("Game Week (2025)") + 
+  ylab("Expected Points") +
+  theme_minimal()+
+  facet_wrap(~Team)
+
+difficulty_lm %>% ggplotly()
+
+```
+
+**Visual #9: Cumulative expected points over the course of the season**
+
+```{r, echo = FALSE}
+
+difficulty_lm_cuml <- nwsl25_dedup_results4 %>% group_by(Team) %>% arrange(Week) %>% mutate(cuml_xp = cumsum(xPoints)) %>% ungroup() %>%
+  ggplot(aes(x = as.numeric(Week), y = as.numeric(cuml_xp), group = Team, color = Team, text = paste("Opponent:", Opponent))) + geom_point() + scale_color_manual(values = setNames(color_mapping$team_color, color_mapping$Team)) + geom_line(inherit.aes = TRUE) +
+  labs(title = "NWSL 2025 Schedule Difficulty",
+       subtitle = "Expected Points in Each Game Week") +
+  xlab("Game Week (2025)") + 
+  ylab("Expected Points (cumulative)") +
+  theme_minimal()
+
+
+difficulty_lm_cuml %>% ggplotly()
+
+```
+
+**Visual #10: Week-over-week standings based on expected points model**
+
+```{r, echo = FALSE}
+difficulty_lm_standings <- nwsl25_dedup_results4 %>% group_by(Team) %>% arrange(Week) %>% mutate(cuml_xp = cumsum(xPoints)) %>% ungroup() %>% group_by(Week) %>% mutate(rank = rank(cuml_xp)) %>% ungroup() %>% ggplot(aes(x = as.numeric(Week), y = as.numeric(rank), group = Team, color = Team, text = paste("Opponent:", Opponent))) + geom_point() + scale_color_manual(values = setNames(color_mapping$team_color, color_mapping$Team)) + geom_line(inherit.aes = TRUE) +
+  labs(title = "NWSL 2025 Expected Standings",
+       subtitle = "Expected Standings in Each Game Week Based on Expected Points Model") +
+  xlab("Game Week (2025)") + 
+  ylab("Expected Rank") +
+  theme_minimal()
+
+difficulty_lm_standings %>% ggplotly()
+
+```
+
+As you can see by the fact that the last two visuals are nearly identical to the 2024 standings, this model is not at all advanced or indicative of the actual results of the 2025 season. Interestingly, this model has San Diego and Angel City swapping final positions (10 and 12)--maybe it somehow knows about Jaedyn Shaw and Naomi Girma leaving.
+
+So excited for the 2025 season to start!! Let me know if there is any other schedule-related data you think would be interesting to look at! Also, Midge Purce, if you are seeing this, I will knit you gorgeous stylish fingerless gloves if you re-sign with Gotham :)
+
