@@ -13,12 +13,6 @@
     {% include head-custom.html %}
   </head>
   <body>
-    <ul>
-  {% for link in site.links %}
-    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-  {% endfor %}
-</ul>
-
     <div class="wrapper">
       <header>
         <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
@@ -38,6 +32,12 @@
         {% endif %}
       </header>
       <section>
+            <ul>
+  {% for link in site.links %}
+    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+  {% endfor %}
+</ul>
+
 
       {{ content }}
 
