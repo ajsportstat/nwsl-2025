@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Schedule Visualizations"
+title: "Schedule and Offseason Visualizations"
 permalink: /schedule/
 ---
 
