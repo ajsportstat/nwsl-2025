@@ -13,18 +13,18 @@
     {% include head-custom.html %}
   </head>
   <body>
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/match/index.md">Match Visualizations</a></li>
-        <li><a href="/player/index.md">Player Visualizations</a></li>
-        <li><a href="/schedule/index.md">Schedule Visualizations</a></li>
-        <li><a href="/all/index.md">All Posts</a></li>
-      </ul>
-    </nav>
-
     <div class="wrapper">
       <header>
+        <nav>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/match/index.md">Match Visualizations</a></li>
+            <li><a href="/player/index.md">Player Visualizations</a></li>
+            <li><a href="/schedule/index.md">Schedule Visualizations</a></li>
+            <li><a href="/all/index.md">All Posts</a></li>
+          </ul>
+        </nav>
+
         <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
 
         {% if site.logo %}
