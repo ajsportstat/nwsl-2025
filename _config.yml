@@ -9,3 +9,5 @@ links:
     url: "match/index.html"
   - title: "Player Visualizations"
     url: "player/index.html"
+  - title: "All Posts"
+    url: "all/readme.md"
