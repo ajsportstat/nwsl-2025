@@ -13,15 +13,19 @@
     {% include head-custom.html %}
   </head>
   <body>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/match/index.md">Match Visualizations</a></li>
+        <li><a href="/player/index.md">Player Visualizations</a></li>
+        <li><a href="/schedule/index.md">Schedule Visualizations</a></li>
+        <li><a href="/all/index.md">All Posts</a></li>
+      </ul>
+    </nav>
+
     <div class="wrapper">
       <header>
         <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
-         <ul>
-           {% for link in site.links %}
-           <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-           {% endfor %}\
-         </ul>
-
 
         {% if site.logo %}
           <img src="{{site.logo | relative_url}}" alt="Logo" />
