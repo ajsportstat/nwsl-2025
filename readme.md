@@ -6,4 +6,4 @@
 
 [Player Visualizations](player/index.html)
 
-[All Posts](all/_config.yml)
+[All Posts](all/readme.md)
