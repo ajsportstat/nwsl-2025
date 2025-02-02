@@ -1,7 +1,9 @@
-# NWSL, visualized
+## Navigation
 
-[Schedule](schedule/index.html)
+[Schedule Visualizations](schedule/index.html)
 
-[Matches](match/index.html)
+[Match Visualizations](match/index.html)
 
-[Players](player/index.html)
+[Player Visualizations](player/index.html)
+
+[All Posts](all/index.html)
