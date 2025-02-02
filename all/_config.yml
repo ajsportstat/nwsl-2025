@@ -1,4 +1,14 @@
 title: NWSL, visualized
 description: Hi! My name is AJ and I create visualizations of NWSL data. Here, you can find interactive versions of all of the graphics that I have made and shared.
-<a href="readme.md">Home</a>
 theme: jekyll-theme-minimal
+
+links:
+  - title: "Schedule Visualizations"
+    url: "schedule/index.html"
+  - title: "Match Visualizations"
+    url: "match/index.html"
+  - title: "Player Visualizations"
+    url: "player/index.html"
+  - title: "All Posts"
+    url: "all/readme.md"
+    
