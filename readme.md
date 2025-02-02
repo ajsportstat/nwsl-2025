@@ -1,4 +1,6 @@
-# Featured Posts
+# NWSL, visualized
+
+## Featured Posts
 
 [Jenna Nighswonger: A statistical retrospective -- 1/27/2025](player/nighswonger.html)
 
