@@ -1,8 +1,8 @@
 title: NWSL, visualized
 description: Hi! My name is AJ and I create visualizations of NWSL data. Here, you can find interactive versions of all of the graphics that I have made and shared.
-<a href="all/index.html">All posts</a>
-<a href="schedule/index.html">Schedule Visualizations</a>
-<a href="match/index.html">Match Visualizations</a>
-<a href="player/index.html">Player Visualizations</a>
+  <a href="all/index.html">All posts</a>
+  <a href="schedule/index.html">Schedule Visualizations</a>
+  <a href="match/index.html">Match Visualizations</a>
+  <a href="player/index.html">Player Visualizations</a>
 
 theme: jekyll-theme-minimal
