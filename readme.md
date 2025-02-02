@@ -1,9 +1,5 @@
-## Navigation
+# All Posts
 
-[Schedule Visualizations](schedule/index.html)
+[Jenna Nighswonger: A statistical retrospective -- 1/27/2025](player/nighswonger.html)
 
-[Match Visualizations](match/index.html)
-
-[Player Visualizations](player/index.html)
-
-[All Posts](all/readme.md)
+[NWSL 2025 schedule, visualized -- 1/23/2025](schedule/schedule.html)
