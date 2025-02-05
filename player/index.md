@@ -12,4 +12,4 @@ permalink: /player/
 &nbsp;
 &nbsp;
 
-[Back to home](https://ajsportstat.github.io/nwsl-2025)
+##### [Back to home](https://ajsportstat.github.io/nwsl-2025)
