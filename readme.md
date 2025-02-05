@@ -8,10 +8,4 @@
 
 ### [NWSL 2025 schedule, visualized -- 1/23/2025](schedule/schedule.html)
 
-Non-interactive versions of posts can be found [here](https://www.reddit.com/user/ajsportstat/submitted/)
-
-&nbsp;
-&nbsp;
-&nbsp;
-
-##### [Back to home](https://ajsportstat.github.io/nwsl-2025)
+##### Non-interactive versions of posts can be found [here](https://www.reddit.com/user/ajsportstat/submitted/)
