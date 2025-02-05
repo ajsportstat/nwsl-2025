@@ -12,3 +12,4 @@ permalink: /all/
 
 [NWSL 2025 schedule, visualized -- 1/23/2025](schedule.html)
 
+[Back to home](https://ajsportstat.github.io/nwsl-2025)
