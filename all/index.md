@@ -6,6 +6,8 @@ permalink: /all/
 
 # All Posts
 
+### [Five to watch from the bottom six: Midfielders -- 02/09/2025](player/midfielders.html)
+
 ### [NWSL 2025 Offseason Tracker -- 02/02/2025](offseason.html)
 
 ### [Jenna Nighswonger: A statistical retrospective -- 1/27/2025](nighswonger.html)
