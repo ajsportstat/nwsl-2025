@@ -6,7 +6,7 @@ permalink: /all/
 
 # All Posts
 
-### [Five to watch from the bottom six: Defenders -- 02/09/2025](defenders.html)
+### [Five to watch from the bottom six: Defenders -- 02/16/2025](defenders.html)
 
 ### [Five to watch from the bottom six: Midfielders -- 02/09/2025](midfielders.html)
 
