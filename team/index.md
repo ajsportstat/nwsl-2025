@@ -6,7 +6,7 @@ permalink: /player/
 
 # Team Visualizations
 
-### [Angel City has a set piece defense problem -- 04/18/2025](setpiece.html)
+### [Angel City has a set piece defense problem -- 04/18/2025](acfc-set-piece.html)
 
 &nbsp;
 &nbsp;
