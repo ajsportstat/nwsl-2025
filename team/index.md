@@ -1,7 +1,7 @@
 ---
 layout: default
-title: "Player Visualizations"
-permalink: /player/
+title: "Team Visualizations"
+permalink: /team/
 ---
 
 # Team Visualizations
