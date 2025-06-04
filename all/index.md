@@ -6,6 +6,10 @@ permalink: /all/
 
 # All Posts
 
+### [NWSL 2025 Mid-season: Bench Best XI -- 06/04/2025](benchplayers.html)
+
+### [Angel City has a set piece defense problem -- 04/18/2025](acfc-set-piece.html)
+
 ### [Five to watch from the bottom six: Forwards -- 03/07/2025](forwards.html)
 
 ### [Five to watch from the bottom six: Defenders -- 02/16/2025](defenders.html)
