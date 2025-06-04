@@ -2,7 +2,7 @@
 
 ## Featured Posts
 
-### [NWSL 2025 Mid-season: Bench Best XI](player/benchplayers.html)
+### [NWSL 2025 Mid-season: Bench Best XI -- 06/04/2025](player/benchplayers.html)
 
 ### [Angel City has a set piece defense problem -- 04/18/2025](team/acfc-set-piece.html)
 
