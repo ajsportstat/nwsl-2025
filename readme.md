@@ -2,6 +2,10 @@
 
 ## Featured Posts
 
+### [How real is Racing Louisville?: Part 2 -- 07/15/2025](team/louisvillept2.html)
+
+### [How real is Racing Louisville?: Part 1 -- 07/15/2025](team/louisvillept1.html)
+
 ### [NWSL 2025 Mid-season: Bench Best XI -- 06/04/2025](player/benchplayers.html)
 
 ### [Angel City has a set piece defense problem -- 04/18/2025](team/acfc-set-piece.html)
